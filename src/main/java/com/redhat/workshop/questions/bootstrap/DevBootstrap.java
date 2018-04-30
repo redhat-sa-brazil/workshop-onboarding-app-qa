@@ -20,7 +20,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 	public void initData() {
 		Question q1 = new Question();
 		q1.setDescription("Qual sua cor favorita?");
-		q1.setActive(true);
+		q1.setEnabled(true);
 		q1.getOptions().add(new Option("Vermelho"));
 		q1.getOptions().add(new Option("Azul"));
 		q1.getOptions().add(new Option("Amarelo"));
@@ -29,7 +29,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 		
 		Question q2 = new Question();
 		q2.setDescription("Você conhece docker?");
-		q2.setActive(false);
+		q2.setEnabled(false);
 		q2.getOptions().add(new Option("Sim"));
 		q2.getOptions().add(new Option("Não"));
 		

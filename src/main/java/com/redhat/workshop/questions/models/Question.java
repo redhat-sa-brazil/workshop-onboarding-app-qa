@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
-@Table(name = "question")
+@Table(name = "Question")
 @Data
 public class Question{
 
@@ -30,11 +30,13 @@ public class Question{
 	@NotNull
 	@Size(max = 200, min = 5, message = "Descrição deve ter no minimo 5 e no máximo 200 chars")
 	private String description;
-		
+	
 	@OneToMany(cascade = {CascadeType.ALL, CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true, fetch = FetchType.EAGER)
 	@JoinColumn(name = "question_id")
 	@Column(nullable = false)
 	private List<Option> options = new ArrayList<Option>();
 	
-	private Boolean active;
+	@Column(columnDefinition = "BOOLEAN")
+	@NotNull
+	private Boolean enabled;
 }

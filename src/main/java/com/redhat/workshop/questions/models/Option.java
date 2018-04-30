@@ -10,20 +10,26 @@ import javax.validation.constraints.Size;
 
 import lombok.Data;
 
-@Entity
-@Table(name = "option")
 @Data
+@Entity
+@Table(name = "Options")
 public class Option{
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
 	@NotNull
 	@Size(max = 70, min = 1, message = "Opção deve ter no minimo 1 e no máximo 70")
-	private String option;
+	private String description;
 	
-	public Option(String option) {
-		this.option = option;
+	private Integer totalVotes;
+	
+	public Option() {
+		
+	}
+	
+	public Option(String description) {
+		this.description = description;
 	}
 }
