@@ -112,3 +112,17 @@ Para atualizar uma pergunta, basta enviar um `PUT` ou um `PATCH` para o contexto
 ## Deletar pergunta
 
 Para deletar uma pergunta, basta executar um `DELETE` no contexto `http://localhost:8080/rest/question/<id da pergunta>`
+
+## Votar
+
+Para votar em uma opção, envie um `POST` para o contexto `http://localhost:8080/rest/vote` conforme abaixo:
+
+```
+{
+	"comment": "Não sei nada de docker",
+	"email": "joao@joao.com",
+	"option": {
+		"id": 2
+	}
+}
+```
