@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 import com.redhat.workshop.questions.models.Option;
 import com.redhat.workshop.questions.models.Question;
-import com.redhat.workshop.questions.models.Vote;
+import com.redhat.workshop.questions.models.Answer;
 import com.redhat.workshop.questions.models.repositories.QuestionRepository;
-import com.redhat.workshop.questions.models.repositories.VoteRepository;
+import com.redhat.workshop.questions.models.repositories.AnswerRepository;
 
 @Component
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent>{
@@ -18,7 +18,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 	private QuestionRepository questionRepo;
 	
 	@Autowired
-	private VoteRepository voteRepository;
+	private AnswerRepository responseRepository;
 	
 	public DevBootstrap(QuestionRepository qr) {
 		this.questionRepo = qr;
@@ -44,12 +44,12 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent>{
 		
 		questionRepo.save(q2);
 		
-		Vote vote = new Vote();
+		Answer vote = new Answer();
 		vote.setComment("Nunca ouvi falar");
 		vote.setEmail("a@a.com");
 		vote.setOption(op1);
 		
-		voteRepository.save(vote);
+		responseRepository.save(vote);
 	}
 
 	@Override

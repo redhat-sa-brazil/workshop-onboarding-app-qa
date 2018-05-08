@@ -10,13 +10,11 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Entity
 @Data
-public class Vote {
+public class Answer {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;

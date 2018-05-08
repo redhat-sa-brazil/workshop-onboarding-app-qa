@@ -6,7 +6,7 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 import com.redhat.workshop.questions.models.Option;
 import com.redhat.workshop.questions.models.Question;
-import com.redhat.workshop.questions.models.Vote;
+import com.redhat.workshop.questions.models.Answer;
 
 @Configuration
 public class EntityConfiguration extends RepositoryRestConfigurerAdapter {
@@ -14,7 +14,7 @@ public class EntityConfiguration extends RepositoryRestConfigurerAdapter {
 	@Override
 	public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
 		config.exposeIdsFor(Question.class);
-		config.exposeIdsFor(Vote.class);
+		config.exposeIdsFor(Answer.class);
 		config.exposeIdsFor(Option.class);
 	}
 }

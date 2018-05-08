@@ -113,9 +113,9 @@ Para atualizar uma pergunta, basta enviar um `PUT` ou um `PATCH` para o contexto
 
 Para deletar uma pergunta, basta executar um `DELETE` no contexto `http://localhost:8080/rest/question/<id da pergunta>`
 
-## Votar
+## Responder
 
-Para votar em uma opção, envie um `POST` para o contexto `http://localhost:8080/rest/vote` conforme abaixo:
+Para responder uma opção, envie um `POST` para o contexto `http://localhost:8080/rest/vote` conforme abaixo:
 
 ```
 {

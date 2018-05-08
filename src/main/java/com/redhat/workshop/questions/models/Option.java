@@ -35,7 +35,7 @@ public class Option{
 	@OneToMany(cascade = {CascadeType.ALL},orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "option_id")
 	@JsonIgnore
-	private List<Vote> votes = new ArrayList<Vote>();
+	private List<Answer> votes = new ArrayList<Answer>();
 	
 	public Option() {
 		

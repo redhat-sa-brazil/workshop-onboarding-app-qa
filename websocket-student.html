@@ -18,10 +18,12 @@
                 var socket = new SockJS('http://localhost:8080/socket');
                 stompClient = Stomp.over(socket);  
                 stompClient.connect({}, function(frame) {
-                    setConnected(true);
-                    console.log('Connected: ' + frame);
+                    stompClient.subscribe('/answer/message', function(messageOutput) {
+                        console.log("Recebi msg do canal student " + messageOutput);
+                    });
+                    
                     stompClient.subscribe('/question/message', function(messageOutput) {
-                        showMessageOutput(JSON.parse(messageOutput.body));
+                        console.log("Recebi msg do canal instructor " + messageOutput);
                     });
                 });
             }
@@ -35,10 +37,20 @@
             }
              
             function sendMessage() {
-                var from = document.getElementById('from').value;
-                var text = document.getElementById('text').value;
-                stompClient.send("/app/hello", {}, 
-                  JSON.stringify({'from':from, 'text':text}));
+                //var from = document.getElementById('from').value;
+                //var text = document.getElementById('text').value;
+                
+                var response = {
+                	"comment": "sei sim",
+                	"email": "gluszczy@redhat.com",
+                	"option": {
+                		"id": 2
+                	}
+                };
+                
+                stompClient.send("/app/student", {}, 
+                  JSON.stringify(response)
+                );
             }
              
             function showMessageOutput(messageOutput) {
@@ -64,9 +76,10 @@
                 </button>
             </div>
             <br />
+            <button id="sendMessage" onclick="sendMessage();">Send</button>
             <div id="conversationDiv">
-                <input type="text" id="text" placeholder="Write a message..."/>
-                <button id="sendMessage" onclick="sendMessage();">Send</button>
+                <!-- <input type="text" id="text" placeholder="Write a message..."/> -->
+                
                 <p id="response"></p>
             </div>
         </div>
