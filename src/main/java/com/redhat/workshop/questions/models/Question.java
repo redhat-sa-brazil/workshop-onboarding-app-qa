@@ -37,6 +37,5 @@ public class Question{
 	private List<Option> options = new ArrayList<Option>();
 	
 	@Column(columnDefinition = "BOOLEAN")
-	@NotNull
 	private Boolean enabled;
 }
