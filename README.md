@@ -122,35 +122,53 @@ Para deletar uma pergunta, basta executar um `DELETE` no contexto `http://localh
 
 ## Responder
 
-Para responder uma questão, envie via WebSocket uma requisição da seguinte forma:
+Para responder uma questão, envie uma requisição para `http://localhost:8080/rest/answer` com o body da seguinte forma:
 
 ```
-			var response = {
-                	"comment": "Nunca ouvi falar",
-                	"email": "gluszczy@redhat.com",
-                	"option": {
-                		"id": 2
-                	}
-                };
-                
-                stompClient.send("/app/student", {}, 
-                  JSON.stringify(response)
-                );
+{
+   	"comment": "Nunca ouvi falar",
+   	"email": "gluszczy@redhat.com",
+    	"option": {
+   		"id": 2
+    	}
+}
 ```
 
-Para escutar por mensagens, basta subscrever nos canais conforme abaixo:
+## Ativar uma questão
+
+Para ativar uma questão, envie uma requisição POST `http://localhost:8080/rest/question/<id>/activate`. Não há necessidade de mandar conteúdo no body.
+
+## Desativar uma questão
+
+Para desativar uma questão, envie uma requisição POST `http://localhost:8080/rest/question/<id>/desactivate`. Não há necessidade de mandar conteúdo no body.
+
+## Instructor WebSocket
+
+Assim que uma pergunta é respondida por um estudante, a mesma é encaminhada para o canal do instrutor.
+
+```
+function connect() {
+	var socket = new SockJS('http://localhost:8080/socket');
+     stompClient = Stomp.over(socket);  
+     stompClient.connect({}, function(frame) {
+     	stompClient.subscribe('/instructor', function(messageOutput) {
+          	console.log("Recebi msg do canal instructor " + messageOutput);
+          });
+     });
+}
+```
+
+## Student WebSocket
+
+Assim que uma questão é ativada/desativada, a questao será enviada pelo canal `/student` conforme código abaixo:
 
 ```
 		function connect() {
                 var socket = new SockJS('http://localhost:8080/socket');
                 stompClient = Stomp.over(socket);  
                 stompClient.connect({}, function(frame) {
-                    stompClient.subscribe('/answer/message', function(messageOutput) {
+                    stompClient.subscribe('/student', function(messageOutput) {
                         console.log("Recebi msg do canal student " + messageOutput);
-                    });
-                    
-                    stompClient.subscribe('/question/message', function(messageOutput) {
-                        console.log("Recebi msg do canal instructor " + messageOutput);
                     });
                 });
             }

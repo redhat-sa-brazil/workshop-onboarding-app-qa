@@ -7,5 +7,4 @@ import com.redhat.workshop.questions.models.Question;
 
 @RepositoryRestResource(collectionResourceRel = "question", path = "question")
 public interface QuestionRepository extends PagingAndSortingRepository<Question, Long> {
-	
 }

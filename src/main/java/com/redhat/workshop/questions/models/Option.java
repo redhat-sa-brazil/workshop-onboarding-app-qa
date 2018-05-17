@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -36,6 +37,10 @@ public class Option{
 	@JoinColumn(name = "option_id")
 	@JsonIgnore
 	private List<Answer> votes = new ArrayList<Answer>();
+	
+	@ManyToOne
+	@JsonIgnore
+	private Question question;
 	
 	public Option() {
 		

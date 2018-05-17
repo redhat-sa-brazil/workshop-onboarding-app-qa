@@ -3,64 +3,9 @@
         <title>Chat WebSocket</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
         <script type="text/javascript">
-            var stompClient = null;
-             
-            function setConnected(connected) {
-                document.getElementById('connect').disabled = connected;
-                document.getElementById('disconnect').disabled = !connected;
-                document.getElementById('conversationDiv').style.visibility 
-                  = connected ? 'visible' : 'hidden';
-                document.getElementById('response').innerHTML = '';
-            }
-             
-            function connect() {
-                var socket = new SockJS('http://localhost:8080/socket');
-                stompClient = Stomp.over(socket);  
-                stompClient.connect({}, function(frame) {
-                    stompClient.subscribe('/answer/message', function(messageOutput) {
-                        console.log("Recebi msg do canal student " + messageOutput);
-                    });
-                    
-                    stompClient.subscribe('/question/message', function(messageOutput) {
-                        console.log("Recebi msg do canal instructor " + messageOutput);
-                    });
-                });
-            }
-             
-            function disconnect() {
-                if(stompClient != null) {
-                    stompClient.disconnect();
-                }
-                setConnected(false);
-                console.log("Disconnected");
-            }
-             
-            function sendMessage() {
-                //var from = document.getElementById('from').value;
-                //var text = document.getElementById('text').value;
-                
-                var response = {
-                	"comment": "sei sim",
-                	"email": "gluszczy@redhat.com",
-                	"option": {
-                		"id": 2
-                	}
-                };
-                
-                stompClient.send("/app/student", {}, 
-                  JSON.stringify(response)
-                );
-            }
-             
-            function showMessageOutput(messageOutput) {
-                var response = document.getElementById('response');
-                var p = document.createElement('p');
-                p.style.wordWrap = 'break-word';
-                p.appendChild(document.createTextNode(messageOutput.from + ": " 
-                  + messageOutput.text + " (" + messageOutput.time + ")"));
-                response.appendChild(p);
-            }
+            
         </script>
     </head>
     <body onload="disconnect()">
@@ -82,7 +27,110 @@
                 
                 <p id="response"></p>
             </div>
+            <div class="chart-container" style="position: relative; height:400px; width:400px">
+    			<canvas id="myChart" width="400px" height="400px"></canvas>
+			</div>
+            
         </div>
- 
+ 	<script type="text/javascript">
+ 	var arrayData = [];
+ 	
+ 	var ctx = document.getElementById("myChart").getContext('2d');
+		
+		var myChart = new Chart(ctx, {
+		    type: 'pie',
+		    data: {
+		        labels: ["Sim", "Não",],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: arrayData,
+		            backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255,99,132,1)',
+		                'rgba(54, 162, 235, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    }
+		});
+ 	
+ 	
+ 	var stompClient = null;
+    
+    function setConnected(connected) {
+        document.getElementById('connect').disabled = connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('conversationDiv').style.visibility 
+          = connected ? 'visible' : 'hidden';
+        document.getElementById('response').innerHTML = '';
+    }
+     
+    function connect() {
+    	var sim = 0;
+    	var nao = 0;
+        var socket = new SockJS('http://localhost:8080/socket');
+        stompClient = Stomp.over(socket);  
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/student', function(messageOutput) {
+                console.log("Recebi msg do canal student " + messageOutput);
+            });
+            
+            stompClient.subscribe('/instructor', function(messageOutput) {
+            	console.log("Recebi msg do canal instructor " + JSON.parse(messageOutput.body).option.description);
+            	if(JSON.parse(messageOutput.body).option.description == "Sim") {
+            		sim++;
+            	}
+            	if(JSON.parse(messageOutput.body).option.description == "Não") {
+            		nao++;	
+            	}
+            	myChart.data.datasets.forEach((dataset) => {
+                    dataset.data = [sim, nao];
+                });
+            	
+            	myChart.update();
+            });
+        });
+    }
+     
+    function disconnect() {
+        if(stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
+    }
+     
+    function sendMessage() {
+        //var from = document.getElementById('from').value;
+        //var text = document.getElementById('text').value;
+        
+        var response = {
+        	"comment": "sei sim",
+        	"email": "gluszczy@redhat.com",
+        	"option": {
+        		"id": 2
+        	}
+        };
+        
+        stompClient.send("/app/student", {}, 
+          JSON.stringify(response)
+        );
+    }
+     
+    function showMessageOutput(messageOutput) {
+        var response = document.getElementById('response');
+        var p = document.createElement('p');
+        p.style.wordWrap = 'break-word';
+        p.appendChild(document.createTextNode(messageOutput.from + ": " 
+          + messageOutput.text + " (" + messageOutput.time + ")"));
+        response.appendChild(p);
+    }
+ 	
+ 	
+ 		
+ 	</script>
     </body>
 </html>

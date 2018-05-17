@@ -21,12 +21,12 @@
                     //setConnected(true);
                     //console.log('Connected: ' + frame);
                     
-                    stompClient.subscribe('/question/message', function(messageOutput) {
-                        showMessageOutput(JSON.parse(messageOutput.body));
+                    stompClient.subscribe('/instructor', function(messageOutput) {
+                        //showMessageOutput(JSON.parse(messageOutput.body));
                         console.log("Recebi msg do question");
                     });
                     
-                    stompClient.subscribe('/response/message', function(messageOutput) {
+                    stompClient.subscribe('/student', function(messageOutput) {
                         console.log("Recebi msg do response");
                     });
                 });

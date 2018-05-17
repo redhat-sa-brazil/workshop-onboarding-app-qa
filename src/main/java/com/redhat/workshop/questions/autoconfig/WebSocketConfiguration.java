@@ -13,7 +13,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
     public void configureMessageBroker(MessageBrokerRegistry config) {
 		
 		// Recebimento
-        config.enableSimpleBroker("/question", "/answer");
+        config.enableSimpleBroker("/instructor", "/student");
         
         // Envio
         config.setApplicationDestinationPrefixes("/app");
